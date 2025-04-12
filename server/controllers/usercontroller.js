@@ -2,7 +2,7 @@ import userModel from "../models/usermodels.js";
 
 export const getUserData = async (req, res) => {
     try {
-        // Get user ID from req.user (set by auth middleware) instead of req.body
+        
         const userId = req.user?.id;
         
         if (!userId) {

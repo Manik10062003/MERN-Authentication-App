@@ -28,8 +28,8 @@ export const registered = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // ❌ NOT true in local dev
-      sameSite: "strict", // ✅ Best for localhost
+      secure: false, 
+      sameSite: "strict", 
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -71,8 +71,8 @@ export const login = async (req, res) => {
 
    res.cookie("token", token, {
      httpOnly: true,
-     secure: false, // ❌ NOT true in local dev
-     sameSite: "strict", // ✅ Best for localhost
+     secure: false, // 
+     sameSite: "strict", 
      maxAge: 7 * 24 * 60 * 60 * 1000,
    });
 
@@ -130,13 +130,24 @@ export const verifyotp = async (req, res) => {
 };
 
 export const verifyEmail = async (req, res) => {
-  const { userId, OTP } = req.body;
-  if (!userId || !OTP) {
-    return res.json({ success: false, message: "Details required" });
+  const { OTP } = req.body;
+
+  if (!OTP) {
+    return res.json({ success: false, message: "OTP required" });
   }
 
   try {
-    const user = await userModel.findById(userId);
+    // 1. Extract user from JWT
+    const token =
+      req.cookies.token || req.header("Authorization")?.split(" ")[1];
+    if (!token) {
+      return res.json({ success: false, message: "Authentication required" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await userModel.findById(decoded.id);
+
+    // 2. Verify OTP
     if (!user) {
       return res.json({ success: false, message: "User not found" });
     }
@@ -149,6 +160,7 @@ export const verifyEmail = async (req, res) => {
       return res.json({ success: false, message: "OTP expired" });
     }
 
+    // 3. Mark as verified
     user.isAccountVerified = true;
     user.verifyotp = "";
     user.verifyotpexpireat = 0;
@@ -160,10 +172,15 @@ export const verifyEmail = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in verifyEmail:", error);
-    res.json({ success: false, message: "Something went wrong" });
+    res.json({
+      success: false,
+      message:
+        error instanceof jwt.JsonWebTokenError
+          ? "Invalid session"
+          : "Something went wrong",
+    });
   }
 };
-
 export const isauthenticated = async (req, res) => {
   try {
     return res.json({ success: true, message: "Authenticated" });

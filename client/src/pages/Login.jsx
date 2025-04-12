@@ -28,7 +28,7 @@ const Login = () => {
             password,
           },
           {
-            withCredentials: true, // ✅ Add this
+            withCredentials: true, 
           }
         );
         if (data.success) {
@@ -46,7 +46,7 @@ const Login = () => {
             password,
           },
           {
-            withCredentials: true, // ✅ Add this
+            withCredentials: true, 
           }
         );
         if (data.success) {

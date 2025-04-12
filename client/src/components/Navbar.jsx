@@ -10,7 +10,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { userData, backendurl, setUserData,isLoggedin, setIsLoggedIn } =
     useContext(AppContext);
-  console.log("Navbar userData:", userData); // ✅ Add this
+  console.log("Navbar userData:", userData); 
 
   const sendverificationotp = async () => {
     try {

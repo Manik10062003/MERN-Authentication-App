@@ -1,7 +1,5 @@
-// server/middleware/userAuth.js
 import jwt from "jsonwebtoken";
 const userAuth = async (req, res, next) => {
-  // Accept token from either cookies or Authorization header
   const token =
     req.cookies.token || req.headers.authorization?.replace("Bearer ", "");
 

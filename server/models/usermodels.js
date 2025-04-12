@@ -1,9 +1,9 @@
-import mongoose from "mongoose"; // Keep ES6 import syntax
+import mongoose from "mongoose"; 
 
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true }, // ✅ Fixed typo & corrected `required`
-  email: { type: String, required: true, unique: true }, // ✅ Added `unique: true`
-  password: { type: String, required: true }, // ✅ Fixed `required`
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true }, 
+  password: { type: String, required: true }, 
   verifyotp: { type: String, default: "" },
   verifyotpexpireat: { type: Number, default: 0 },
   isAccountVerified: { type: Boolean, default: false },

@@ -33,7 +33,7 @@ export const AppContextProvider = (props) => {
       const { data } = await axios.get("http://localhost:8000/api/user/data", {
         withCredentials: true,
       });
-      console.log("User Data", data); // ✅
+      console.log("User Data", data);
 
       data.success ? setUserData(data.userData) : toast.error(data.message);
     } catch (error) {
